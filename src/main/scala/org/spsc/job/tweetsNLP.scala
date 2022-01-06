@@ -1,13 +1,14 @@
 package org.spsc.job
 
+import com.johnsnowlabs.nlp.pretrained.PretrainedPipeline
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{col, collect_list, explode}
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
-object mostFrequentHashtag extends SparkHelper {
+object tweetsNLP extends SparkHelper{
 
-  def main(args: Array[String]): Unit = {
+  def main(Args: Array[String]): Unit = {
+
     //Added to hide all info and warnings of Spark
     Logger.getLogger("org").setLevel(Level.ERROR)
 
@@ -24,9 +25,10 @@ object mostFrequentHashtag extends SparkHelper {
   }
 
   def execute(sparkSession: SparkSession): Unit = {
-    //FIXME complete this query
-    val commons = Commons.readTweetsFromFile(sparkSession)
-    val df2 = commons.select(col("id"), explode(col("entities.hashtags")))
-    df2.groupBy("id").agg(collect_list("col").alias("hashtags")).sort("hashtags")
+    //FIXME NOT WORKING
+    val tweets = Commons.readTweetsFromFile(sparkSession)
+    val explainDocumentPipeline = PretrainedPipeline("explain_document_ml")
+    val annotations_df = explainDocumentPipeline.transform(tweets.select("text"))
+    annotations_df.show()
   }
 }
