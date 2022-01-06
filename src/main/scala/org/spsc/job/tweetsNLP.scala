@@ -5,7 +5,8 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
-object tweetsNLP extends SparkHelper{
+object tweetsNLP extends SparkHelper {
+  //TODO TEST ON CRISTIAN PC
 
   def main(Args: Array[String]): Unit = {
 
@@ -25,10 +26,36 @@ object tweetsNLP extends SparkHelper{
   }
 
   def execute(sparkSession: SparkSession): Unit = {
-    //FIXME NOT WORKING
-    val tweets = Commons.readTweetsFromFile(sparkSession)
-    val explainDocumentPipeline = PretrainedPipeline("explain_document_ml")
-    val annotations_df = explainDocumentPipeline.transform(tweets.select("text"))
-    annotations_df.show()
+    var tweets = Commons.readTweetsFromFile(sparkSession)
+    tweets = tweets.filter(tweets("lang") === "en")
+    val pipeline = new PretrainedPipeline("analyze_sentimentdl_use_twitter", "en")
+    val result = pipeline.annotate(tweets, "text")
+    result.select("text", "sentiment").show(false)
   }
+
+//  def execute(sparkSession: SparkSession): Unit = {
+//    val document = DocumentAssembler()
+//      .setInputCol("text")
+//      .setOutputCol("document")
+//
+//    val embeddings = BertSentenceEmbeddings
+//      .pretrained("labse", "xx")
+//      .setInputCols(Array("document"))
+//      .setOutputCol("sentence_embeddings")
+//
+//    val sentimentClassifier = ClassifierDLModel.pretrained("classifierdl_bert_sentiment", "es")
+//      .setInputCols(Array("document", "sentence_embeddings"))
+//      .setOutputCol("class")
+//
+//    val fr_sentiment_pipeline = new Pipeline().setStages(Array(document, embeddings, sentimentClassifier))
+//
+//    val light_pipeline = LightPipeline(fr_sentiment_pipeline.fit(spark.createDataFrame([['']]).toDF("text")))
+//
+//    val result1 = light_pipeline.annotate("Estoy seguro de que esta vez pasará la entrevista.")
+//
+//    val result2 = light_pipeline.annotate("Soy una persona que intenta desayunar todas las mañanas sin falta.")
+//
+//    val result3 = light_pipeline.annotate("No estoy seguro de si mi salario mensual es suficiente para vivir.")
+//  }
+
 }

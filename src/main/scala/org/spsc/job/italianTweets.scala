@@ -2,10 +2,11 @@ package org.spsc.job
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.desc
 import org.spsc.utils.{Commons, SparkHelper}
 
-object italianVisitorsRegion extends SparkHelper {
+object italianTweets extends SparkHelper {
+
+  //take all italian tweets, join with users so they probably are italian people, no one guarantee it
 
   def main(args: Array[String]): Unit = {
     //Added to hide all info and warnings of Spark
@@ -24,18 +25,12 @@ object italianVisitorsRegion extends SparkHelper {
   }
 
   def execute(sparkSession: SparkSession): Unit = {
-    var commons = Commons.usersJoined(sparkSession)
-    commons.show(true)
-    //FIXME italianVisitorsRegion query
-//    commons = commons
-//      .filter(commons("location").isNotNull)
-//      .dropDuplicates("id")
-//      .groupBy("location")
-//      .count()
-//      .sort(desc("count"))
-//    println("RESULTS\n")
-//    commons.show(false)
+    val tweets = Commons.readTweetsFromFile(sparkSession).dropDuplicates("id")
+    val users = Commons.readUsersFromFile(sparkSession).dropDuplicates("id")
+    var joined = tweets.join(users, tweets("author_id") === users("id"))
+    joined = joined.filter(joined("lang") === "it").select("text")
+    joined.show(true)
+    println(joined.count())
+
   }
-
-
 }
