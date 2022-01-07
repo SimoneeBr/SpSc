@@ -1,7 +1,7 @@
 package org.spsc.job
 
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
 object italianTweets extends SparkHelper {
@@ -21,16 +21,26 @@ object italianTweets extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    execute(sparkSession)
+    println(execute(sparkSession).count())
   }
 
-  def execute(sparkSession: SparkSession): Unit = {
+  def execute(sparkSession: SparkSession): Dataset[Row] = {
     val tweets = Commons.readTweetsFromFile(sparkSession).dropDuplicates("id")
     val users = Commons.readUsersFromFile(sparkSession).dropDuplicates("id")
-    var joined = tweets.join(users, tweets("author_id") === users("id"))
-    joined = joined.filter(joined("lang") === "it").select("text")
-    joined.show(true)
-    println(joined.count())
+    val joined = tweets.join(users, tweets("author_id") === users("id"))
+    joined.filter(joined("lang") === "it").select("text")
+  }
 
+  def apiCall(): Long = {
+    // Create SparkContext
+    val sparkContext = getSparkContext()
+    sparkContext.setLogLevel("INFO")
+
+    // Create SparkSession
+    val sparkSession = SparkSession
+      .builder()
+      .getOrCreate()
+
+    execute(sparkSession).count()
   }
 }

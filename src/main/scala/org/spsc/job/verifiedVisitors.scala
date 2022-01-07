@@ -1,7 +1,7 @@
 package org.spsc.job
 
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
 object verifiedVisitors extends SparkHelper {
@@ -21,24 +21,50 @@ object verifiedVisitors extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    allTweetsByVerifiedVisitor(sparkSession) //all tweets produced by verified users
-    allVerifiedVisitors(sparkSession) //all verified users which wrote at least one tweet in this collection
+    println(allTweetsByVerifiedVisitor(sparkSession).count()) //all tweets produced by verified users
+    println(allVerifiedVisitors(sparkSession).count()) //all verified users which wrote at least one tweet in this collection
   }
 
-  def allTweetsByVerifiedVisitor(sparkSession: SparkSession): Unit = {
-    var commons = Commons.usersJoined(sparkSession)
-    commons = commons
+  private def allTweetsByVerifiedVisitor(sparkSession: SparkSession): Dataset[Row] = {
+    val commons = Commons.usersJoined(sparkSession)
+    commons
       .dropDuplicates("id")
       .filter(commons("verified"))
-    println("All tweets produced by verified users: " + commons.count())
+    // println("All tweets produced by verified users: " + commons.count())
   }
 
-  def allVerifiedVisitors(sparkSession: SparkSession): Unit = {
-    var commons = Commons.readUsersFromFile(sparkSession)
-    commons = commons
+  private def allVerifiedVisitors(sparkSession: SparkSession): Dataset[Row] = {
+    val commons = Commons.readUsersFromFile(sparkSession)
+    commons
       .dropDuplicates("id")
       .filter(commons("verified"))
-    println("All verified users: " + commons.count())
+    // println("All verified users: " + commons.count())
+  }
+
+  def allTweetsByVerifiedVisitorAPI(): Long = {
+    // Create SparkContext
+    val sparkContext = getSparkContext()
+    sparkContext.setLogLevel("ERROR")
+
+    // Create SparkSession
+    val sparkSession = SparkSession
+      .builder()
+      .getOrCreate()
+    allTweetsByVerifiedVisitor(sparkSession).count()
+  }
+
+  def allVerifiedVisitorsAPI(): Long = {
+
+    // Create SparkContext
+    val sparkContext = getSparkContext()
+    sparkContext.setLogLevel("ERROR")
+
+    // Create SparkSession
+    val sparkSession = SparkSession
+      .builder()
+      .getOrCreate()
+
+    allVerifiedVisitors(sparkSession).count()
   }
 
 

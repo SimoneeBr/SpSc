@@ -20,15 +20,28 @@ object allVisitors extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    println("RESULTS\nTotal Visitors: " + execute(sparkSession).count());
+    println(execute(sparkSession).count())
   }
 
 
-  def execute(sparkSession: SparkSession): Dataset[Row] = {
-    val allJoined = Commons.globalQueryJoined(sparkSession);
+  private def execute(sparkSession: SparkSession): Dataset[Row] = {
+    val allJoined = Commons.globalQueryJoined(sparkSession)
     allJoined
       .filter((allJoined("country") === "Emirati Arabi Uniti") || allJoined("country") === "AE")
       .dropDuplicates("author_id")
+  }
+
+  def apiCall(): Long = {
+    // Create SparkContext
+    val sparkContext = getSparkContext()
+    sparkContext.setLogLevel("ERROR")
+
+    // Create SparkSession
+    val sparkSession = SparkSession
+      .builder()
+      .getOrCreate()
+
+    execute(sparkSession).count()
   }
 
 
