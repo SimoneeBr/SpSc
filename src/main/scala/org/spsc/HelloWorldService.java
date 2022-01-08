@@ -1,7 +1,7 @@
 package org.spsc;
 
 import com.google.gson.Gson;
-import org.spsc.job.allVisitorsByDay;
+import org.spsc.job.tweetsNLP;
 
 import static spark.Spark.get;
 
@@ -14,32 +14,7 @@ public class HelloWorldService {
 
         get("/hello", (request, response) -> {
             response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
-        });
-
-        get("/hello", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
-        });
-
-        get("/hello", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
-        });
-
-        get("/hello", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
-        });
-
-        get("/hello", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
-        });
-
-        get("/hello", (request, response) -> {
-            response.type("application/json");
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(tweetsNLP.apiCall())));
         });
 
     }
