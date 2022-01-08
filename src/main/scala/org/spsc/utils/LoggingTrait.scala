@@ -23,7 +23,7 @@ private[utils] trait LoggingTrait {
   }
 
   // Log methods that take only a String
-  protected def logInfo(msg: => String)  = {
+  protected def logInfo(msg: => String) = {
     if (log.isInfoEnabled) log.info(msg)
   }
 

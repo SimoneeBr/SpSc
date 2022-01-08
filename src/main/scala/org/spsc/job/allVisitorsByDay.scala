@@ -1,9 +1,12 @@
 package org.spsc.job
 
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{date_format, desc}
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
+
+import java.util
+import scala.util.parsing.json.JSONObject
 
 object allVisitorsByDay extends SparkHelper {
 
@@ -25,8 +28,8 @@ object allVisitorsByDay extends SparkHelper {
     execute(sparkSession)
   }
 
-  def execute(sparkSession: SparkSession): Unit = {
-    val allJoined = Commons.globalQueryJoined(sparkSession);
+  def execute(sparkSession: SparkSession): Dataset[Row] = {
+    val allJoined = Commons.globalQueryJoined(sparkSession)
     var filteredUAE = allJoined.filter((allJoined("country") === "Emirati Arabi Uniti") || allJoined("country") === "AE")
     filteredUAE = filteredUAE
       .select(filteredUAE.col("*"), date_format(filteredUAE("created_at"), "dd/MM/yyyy").as("formatted_data"))
@@ -38,5 +41,24 @@ object allVisitorsByDay extends SparkHelper {
 
     println("RESULTS\n")
     filteredUAE.show(true)
+    filteredUAE
+  }
+
+  def apiCall(): util.List[String] = {
+    // Create SparkContext
+    val sparkContext = getSparkContext()
+    sparkContext.setLogLevel("INFO")
+
+    // Create SparkSession
+    val sparkSession = SparkSession
+      .builder()
+      .getOrCreate()
+
+    import sparkSession.implicits._
+
+    execute(sparkSession).map(row => {
+      val x = row.getValuesMap(row.schema.fieldNames)
+      JSONObject(x).toString()
+    }).collectAsList()
   }
 }
