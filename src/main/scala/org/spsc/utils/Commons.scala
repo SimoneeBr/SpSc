@@ -26,6 +26,7 @@ object Commons {
 
   }
 
+
   def usersJoined(sparkSession: SparkSession): Dataset[Row] = {
     val tweetDF = readTweetsFromFile(sparkSession)
     val userDF = readUsersFromFile(sparkSession)

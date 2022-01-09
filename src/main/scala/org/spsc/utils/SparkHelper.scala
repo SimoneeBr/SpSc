@@ -12,7 +12,7 @@ trait SparkHelper extends Logging {
   def getSparkSession(): SparkSession = {
 
     val conf = new SparkConf()
-      .setMaster("local[*]")
+      .setMaster("local")
       .setAppName("BigDataProject")
     val session = SparkSession.builder().config(conf).getOrCreate()
 
