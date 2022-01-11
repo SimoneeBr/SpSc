@@ -38,6 +38,8 @@ public class JobController {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDayWithoutGeo.apiCall())));
         });
 
+        get("/valByID/:name", (req,res)->{ return "Hello, "+ req.params(":name"); });//da vedere
+
         get("/countryOfTweets", (request, response) -> {
             response.type("application/json");
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(countryOfTweets.apiCall())));
