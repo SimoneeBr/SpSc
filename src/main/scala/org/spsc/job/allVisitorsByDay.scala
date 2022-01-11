@@ -39,8 +39,6 @@ object allVisitorsByDay extends SparkHelper {
       .groupBy("formatted_data").count()
       .sort(desc("count"))
 
-    println("RESULTS\n")
-    filteredUAE.show(true)
     filteredUAE
   }
 

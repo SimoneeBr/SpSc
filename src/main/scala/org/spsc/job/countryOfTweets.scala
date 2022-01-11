@@ -26,7 +26,7 @@ object countryOfTweets extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    execute(sparkSession)
+    execute(sparkSession).show()
   }
 
   def execute(sparkSession: SparkSession): Dataset[Row] = {

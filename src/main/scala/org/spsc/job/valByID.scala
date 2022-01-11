@@ -1,16 +1,13 @@
 package org.spsc.job
 
-import java.util
-
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
-import org.apache.spark.sql.functions.{col, date_format, desc}
-import org.spsc.job.allVisitorsByDayWithoutGeo.getSparkContext
 import org.spsc.utils.{Commons, SparkHelper}
 
+import java.util
 import scala.util.parsing.json.JSONObject
 
-object valByID extends SparkHelper{
+object valByID extends SparkHelper {
   // ALL TWEETS CREATED GROUPED BY DAY
 
   def main(args: Array[String]): Unit = {
@@ -26,20 +23,16 @@ object valByID extends SparkHelper{
       .builder()
       .getOrCreate()
 
-    execute(sparkSession,"1478062424024567810")
+    execute(sparkSession, "1478062424024567810")
   }
 
-  def execute(sparkSession: SparkSession,param:String): Dataset[Row] = {
-    val tweet= Commons.readTweetsFromFile(sparkSession)
-
-    val filter= tweet.filter(tweet("id")===param)
-
-    println("RESULTS\n")
-    filter.show(true)
-    filter
+  def execute(sparkSession: SparkSession, param: String): Dataset[Row] = {
+    val tweet = Commons.readTweetsFromFile(sparkSession)
+    val tmp = tweet.filter(tweet("id") === param)
+    tmp.select("id", "text", "author_id", "created_at", "lang", "source")
   }
 
-  def apiCall(param:String): util.List[String] = {
+  def apiCall(param: String): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
     sparkContext.setLogLevel("WARN")
@@ -49,9 +42,10 @@ object valByID extends SparkHelper{
       .builder()
       .getOrCreate()
 
+
     import sparkSession.implicits._
 
-    execute(sparkSession,param).map(row => {
+    execute(sparkSession, param).map(row => {
       val x = row.getValuesMap(row.schema.fieldNames)
       JSONObject(x).toString()
     }).collectAsList()

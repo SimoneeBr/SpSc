@@ -9,8 +9,6 @@ import static spark.Spark.get;
 
 public class JobController {
 
-    //TODO potremmo avviare spark al run di questo main con un singleton e poi tutti richiamano il metodo
-
     public static void main(String[] args) {
 
         after((Filter) (request, response) -> {
@@ -37,8 +35,6 @@ public class JobController {
             response.type("application/json");
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDayWithoutGeo.apiCall())));
         });
-
-        get("/valByID/:name", (req,res)->{ return "Hello, "+ req.params(":name"); });//da vedere
 
         get("/countryOfTweets", (request, response) -> {
             response.type("application/json");
@@ -84,6 +80,11 @@ public class JobController {
         get("/allVerifiedVisitors", (request, response) -> {
             response.type("application/json");
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(verifiedVisitors.allVerifiedVisitorsAPI())));
+        });
+
+        get("/valByID/:id", (request, response) -> {
+            response.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(valByID.apiCall(request.params(":id")))));
         });
 
     }
