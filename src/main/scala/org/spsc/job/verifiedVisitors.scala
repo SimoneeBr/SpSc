@@ -35,6 +35,8 @@ object verifiedVisitors extends SparkHelper {
 
   private def allVerifiedVisitors(sparkSession: SparkSession): Dataset[Row] = {
     val commons = Commons.readUsersFromFile(sparkSession)
+    //val commons = Commons.globalQueryJoined(sparkSession)
+    //FIXME this query: bisogna usare globalQueryJoined che però non ha al suo interno la colonna "verified" quindi bisogna fare join con la tabella degli utenti
     commons
       .dropDuplicates("id")
       .filter(commons("verified"))
