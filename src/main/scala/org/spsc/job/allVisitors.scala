@@ -28,6 +28,7 @@ object allVisitors extends SparkHelper {
     val allJoined = Commons.globalQueryJoined(sparkSession)
     allJoined
       .filter((allJoined("country") === "Emirati Arabi Uniti") || allJoined("country") === "AE")
+      .dropDuplicates("id")
       .dropDuplicates("author_id")
   }
 

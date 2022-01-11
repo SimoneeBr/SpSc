@@ -11,7 +11,6 @@ import java.util
 import scala.util.parsing.json.JSONObject
 
 object tweetsNLP extends SparkHelper {
-  //TODO TEST ON CRISTIAN PC
 
   def main(Args: Array[String]): Unit = {
 

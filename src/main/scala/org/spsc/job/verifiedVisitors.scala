@@ -21,7 +21,7 @@ object verifiedVisitors extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    println(allTweetsByVerifiedVisitor(sparkSession).count()) //all tweets produced by verified users
+    //println(allTweetsByVerifiedVisitor(sparkSession).count()) //all tweets produced by verified users
     println(allVerifiedVisitors(sparkSession).count()) //all verified users which wrote at least one tweet in this collection
   }
 
@@ -34,13 +34,15 @@ object verifiedVisitors extends SparkHelper {
   }
 
   private def allVerifiedVisitors(sparkSession: SparkSession): Dataset[Row] = {
-    val commons = Commons.readUsersFromFile(sparkSession)
-    //val commons = Commons.globalQueryJoined(sparkSession)
-    //FIXME this query: bisogna usare globalQueryJoined che però non ha al suo interno la colonna "verified" quindi bisogna fare join con la tabella degli utenti
-    commons
+    val users = Commons.readUsersFromFile(sparkSession).dropDuplicates("id")
+    var commons = Commons.globalQueryJoined(sparkSession)
+    //TODO check if it is correct
+    commons = commons
       .dropDuplicates("id")
-      .filter(commons("verified"))
-    // println("All verified users: " + commons.count())
+      .dropDuplicates("author_id")
+      .filter((commons("country") === "Emirati Arabi Uniti") || commons("country") === "AE")
+      .join(users, commons("author_id") === users("id"))
+    commons.filter("verified")
   }
 
   def allTweetsByVerifiedVisitorAPI(): Long = {

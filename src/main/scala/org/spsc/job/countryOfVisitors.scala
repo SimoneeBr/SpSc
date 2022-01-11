@@ -37,7 +37,7 @@ object countryOfVisitors extends SparkHelper {
       .count()
       .sort(desc("count")).limit(5)
     println("RESULTS\n")
-    commons //FIXME country with arab name not showing properly
+    commons
   }
 
   def apiCall(): util.List[String] = {

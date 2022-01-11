@@ -1,8 +1,5 @@
 package org.spsc.job
 
-import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
-import org.spsc.job.italianTweets.{execute, getSparkContext}
 import org.spsc.utils.SparkHelper
 
 object run extends SparkHelper {
@@ -14,7 +11,7 @@ object run extends SparkHelper {
     // Create SparkContext
     val sparkContext = getSparkContext()
     // Create SparkSession
-    while(true){}
+    while (true) {}
 
 
   }
