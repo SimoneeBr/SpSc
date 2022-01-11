@@ -47,7 +47,7 @@ object allVisitorsByDay extends SparkHelper {
   def apiCall(): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession

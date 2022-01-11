@@ -56,7 +56,7 @@ object tweetsNLP extends SparkHelper {
 
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession

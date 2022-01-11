@@ -114,7 +114,7 @@ object metricsTweets extends SparkHelper {
   def api_retweet_count(): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession
@@ -132,7 +132,7 @@ object metricsTweets extends SparkHelper {
   def api_reply_count(): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession
@@ -150,7 +150,7 @@ object metricsTweets extends SparkHelper {
   def api_like_count(): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession
@@ -168,7 +168,7 @@ object metricsTweets extends SparkHelper {
   def api_quote_count(): util.List[String] = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession

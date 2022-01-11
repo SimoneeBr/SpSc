@@ -33,6 +33,11 @@ public class JobController {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDay.apiCall())));
         });
 
+        get("/allVisitorsByDayWithoutGeo", (request, response) -> {
+            response.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(allVisitorsByDayWithoutGeo.apiCall())));
+        });
+
         get("/countryOfTweets", (request, response) -> {
             response.type("application/json");
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(countryOfTweets.apiCall())));

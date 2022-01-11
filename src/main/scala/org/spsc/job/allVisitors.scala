@@ -35,7 +35,7 @@ object allVisitors extends SparkHelper {
   def apiCall(): Long = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("ERROR")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession

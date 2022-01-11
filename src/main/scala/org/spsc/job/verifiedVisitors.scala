@@ -48,7 +48,7 @@ object verifiedVisitors extends SparkHelper {
   def allTweetsByVerifiedVisitorAPI(): Long = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("ERROR")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession
@@ -61,7 +61,7 @@ object verifiedVisitors extends SparkHelper {
 
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("ERROR")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession

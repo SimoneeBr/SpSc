@@ -34,7 +34,7 @@ object italianTweets extends SparkHelper {
   def apiCall(): Long = {
     // Create SparkContext
     val sparkContext = getSparkContext()
-    sparkContext.setLogLevel("INFO")
+    sparkContext.setLogLevel("WARN")
 
     // Create SparkSession
     val sparkSession = SparkSession
