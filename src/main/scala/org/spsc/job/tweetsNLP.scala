@@ -26,6 +26,7 @@ object tweetsNLP extends SparkHelper {
       .builder()
       .getOrCreate()
     import sparkSession.implicits._
+    
     execute(sparkSession).groupBy("value").count().map(row => {
       val x = row.getValuesMap(row.schema.fieldNames)
       JSONObject(x).toString()

@@ -24,7 +24,9 @@ object dropDuplicates extends SparkHelper {
 
   def execute(sparkSession: SparkSession): Dataset[Row] = {
     var twe = Commons.readPlacesFromFile(sparkSession)
-    twe.dropDuplicates("id").coalesce(1).write.json("./src/main/resources/allPlacesIncludes.json")
+    twe = twe.dropDuplicates("id")
+    println(twe.count())
+    twe.coalesce(1).write.json("./src/main/resources/completeAllPlacesIncludes.json")
     twe
   }
 }
