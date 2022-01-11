@@ -1,13 +1,11 @@
 package org.spsc.job
 
-import java.util
-
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.apache.spark.sql.functions.desc
-import org.spsc.job.countryOfTweets.{execute, getSparkContext}
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
+import java.util
 import scala.util.parsing.json.JSONObject
 
 object countryOfVisitors extends SparkHelper {
@@ -37,7 +35,7 @@ object countryOfVisitors extends SparkHelper {
       .dropDuplicates("id")
       .groupBy("location")
       .count()
-      .sort(desc("count"))
+      .sort(desc("count")).limit(5)
     println("RESULTS\n")
     commons //FIXME country with arab name not showing properly
   }

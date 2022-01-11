@@ -1,13 +1,11 @@
 package org.spsc.job
 
-import java.util
-
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.apache.spark.sql.functions.desc
-import org.spsc.job.countryOfTweets.{execute, getSparkContext}
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.spsc.utils.{Commons, SparkHelper}
 
+import java.util
 import scala.util.parsing.json.JSONObject
 
 object deviceOfTweets extends SparkHelper {
@@ -27,7 +25,7 @@ object deviceOfTweets extends SparkHelper {
       .builder()
       .getOrCreate()
 
-    execute(sparkSession)
+    execute(sparkSession).show()
   }
 
   def execute(sparkSession: SparkSession): Dataset[Row] = {
@@ -35,7 +33,7 @@ object deviceOfTweets extends SparkHelper {
     commons = commons
       .filter(commons("source").isNotNull)
       .groupBy("source").count()
-      .sort(desc("count"))
+      .sort(desc("count")).limit(10)
 
     println("RESULTS\n")
     commons

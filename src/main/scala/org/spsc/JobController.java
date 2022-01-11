@@ -2,17 +2,21 @@ package org.spsc;
 
 import com.google.gson.Gson;
 import org.spsc.job.*;
+import spark.Filter;
 
+import static spark.Spark.after;
 import static spark.Spark.get;
 
-public class HelloWorldService {
+public class JobController {
 
-    //FIXME cambiare tutti i return type delle query se sono long restituiti da una count non c'è problema,
-    // se sono i risultati di una groupby devo fare la formattazione json
-
-    //TODO potremmo avviare spark all'run di questo main con in singelton e poi tutti richiamano il metodo
+    //TODO potremmo avviare spark al run di questo main con un singleton e poi tutti richiamano il metodo
 
     public static void main(String[] args) {
+
+        after((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods", "GET");
+        });
 
         get("/tweetsNLP", (request, response) -> {
             response.type("application/json");
