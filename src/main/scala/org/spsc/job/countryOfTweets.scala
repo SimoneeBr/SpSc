@@ -34,7 +34,7 @@ object countryOfTweets extends SparkHelper {
     commons = commons.dropDuplicates("tweet_id")
       .groupBy("country")
       .count()
-      .sort(desc("count")).limit(5)
+      .sort(desc("count")).limit(8)
     println("RESULTS\n")
     commons
   }

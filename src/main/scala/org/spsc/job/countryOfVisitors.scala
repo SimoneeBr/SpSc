@@ -35,7 +35,7 @@ object countryOfVisitors extends SparkHelper {
       .dropDuplicates("id")
       .groupBy("location")
       .count()
-      .sort(desc("count")).limit(5)
+      .sort(desc("count")).limit(8)
     println("RESULTS\n")
     commons
   }
